@@ -159,7 +159,7 @@ export class GameEngine {
             return;
         }
 
-        if (this.bricks.length === 0) {
+        if (this.bricks.every((brick) => brick.strength === 0)) {
             this.gameOver(true);
             this.pause();
             return;
