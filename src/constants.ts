@@ -16,13 +16,6 @@ export const BRICK_COLOR: Record<BrickStrength, string> = {
     3: '#8b0000',
 };
 
-export const enum BRICK_TYPE {
-    EMPTY,
-    RED,
-    GREEN,
-    WHITE,
-}
-
 export const EXAMPLE_LEVEL: Level = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
