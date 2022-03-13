@@ -14,7 +14,7 @@ interface MenuProps {
 
 export const Menu = (props: MenuProps) => {
     const getChangeHandler = (field: keyof GameSettings) => (event: any) => {
-        props.setState(field, event.target.value);
+        props.setState(field, event.target?.value);
     };
 
     return (

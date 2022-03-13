@@ -4,7 +4,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "serve": "vite preview"
+        "serve": "vite preview",
+        "lint": "eslint src/**/*.ts[x]"
     },
     "dependencies": {
         "sass": "^1.49.9",

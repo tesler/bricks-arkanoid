@@ -1,20 +1,24 @@
 import { createEffect, createSignal, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-import { GameView } from '../views/GameView';
-import { initGame, startGame } from '../engine';
+import { GameView } from '../GameView';
+import { GameEngine } from '../GameEngine';
 import { Menu } from './Menu';
 import { GameSettings } from '../types';
 import { GameOver } from './GameOver';
 import { EXAMPLE_LEVEL } from '../constants';
 import { generateLevel } from '../libs/helpers';
+import { Control } from './Control';
+import { Pause } from './Pause';
 
 export const Game = () => {
     let canvas: HTMLCanvasElement | undefined;
     let gameView: GameView;
+    let gameEngine: GameEngine;
 
-    const [showMenu, setShowMenu] = createSignal(true);
+    const [isMenuShowing, setIsMenuShowing] = createSignal(true);
     const [isGameOver, setIsGameOver] = createSignal(false);
+    const [isPaused, setIsPaused] = createSignal(false);
     const [isWin, setIsWin] = createSignal(false);
     const [level, setLevel] = createSignal(EXAMPLE_LEVEL);
 
@@ -27,19 +31,39 @@ export const Game = () => {
     const gameOver = (isWin: boolean) => {
         setIsGameOver(true);
         setIsWin(isWin);
+        gameEngine.pause();
+    };
+
+    const restartGame = () => {
+        gameEngine.refreshGame(level(), {
+            ballRadius: state.ballRadius,
+            ballSpeed: state.ballSpeed,
+            paddleWidth: state.paddleWidth,
+        });
     };
 
     const handleReStartButtonClick = () => {
+        setIsPaused(false);
         setIsGameOver(false);
         setIsWin(false);
-        setShowMenu(true);
+        setIsMenuShowing(true);
         setLevel(EXAMPLE_LEVEL);
+        restartGame();
+    };
+
+    const handlePauseButtonClick = () => {
+        setIsPaused(true);
+        gameEngine.pause();
+    };
+
+    const handleContinueButtonClick = () => {
+        setIsPaused(false);
+        gameEngine.run();
     };
 
     const handleStartButtonClick = () => {
-        setShowMenu(false);
-
-        startGame(gameView, level(), state, gameOver);
+        setIsMenuShowing(false);
+        gameEngine.run();
     };
 
     const handleGenerateLevelButtonClick = () => {
@@ -55,33 +79,41 @@ export const Game = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         gameView = new GameView(canvas);
-
-        createEffect(() =>
-            initGame(gameView, level(), {
+        gameEngine = new GameEngine(
+            gameView,
+            level(),
+            {
                 ballRadius: state.ballRadius,
                 ballSpeed: state.ballSpeed,
                 paddleWidth: state.paddleWidth,
-            }),
+            },
+            gameOver,
         );
+
+        createEffect(() => restartGame());
     });
 
     return (
         <>
-            {isGameOver() ? (
-                <GameOver
-                    isWin={isWin()}
-                    score={1}
+            {isPaused() ? (
+                <Pause
+                    onContinueClick={handleContinueButtonClick}
                     onReStartClick={handleReStartButtonClick}
                 />
+            ) : isGameOver() ? (
+                <GameOver
+                    isWin={isWin()}
+                    onReStartClick={handleReStartButtonClick}
+                />
+            ) : isMenuShowing() ? (
+                <Menu
+                    state={state}
+                    setState={setState}
+                    onStartClick={handleStartButtonClick}
+                    onGenerateLevelClick={handleGenerateLevelButtonClick}
+                />
             ) : (
-                showMenu() && (
-                    <Menu
-                        state={state}
-                        setState={setState}
-                        onStartClick={handleStartButtonClick}
-                        onGenerateLevelClick={handleGenerateLevelButtonClick}
-                    />
-                )
+                <Control onPauseClick={handlePauseButtonClick} />
             )}
             <canvas ref={canvas} class="canvas" />
         </>

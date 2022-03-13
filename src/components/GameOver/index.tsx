@@ -1,13 +1,12 @@
 import { Button } from '../ui/Button';
 import styles from './styles.module.scss';
 
-interface MenuProps {
+interface GameOverProps {
     isWin: boolean;
-    score: number;
     onReStartClick: VoidFunction;
 }
 
-export const GameOver = (props: MenuProps) => {
+export const GameOver = (props: GameOverProps) => {
     return (
         <div
             class={styles.background}

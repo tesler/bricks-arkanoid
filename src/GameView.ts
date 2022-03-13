@@ -1,6 +1,6 @@
-import { Circle } from '../entities/Circle';
-import { Rectangle } from '../entities/Rectangle';
-import { EntityType } from '../types';
+import { Circle } from './entities/Circle';
+import { Rectangle } from './entities/Rectangle';
+import { EntityType } from './types';
 
 export class GameView {
     private context: CanvasRenderingContext2D | null;

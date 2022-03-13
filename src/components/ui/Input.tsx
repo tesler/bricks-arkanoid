@@ -1,10 +1,10 @@
+import { JSX } from 'solid-js';
+
 import styles from './styles.module.scss';
 
-interface InputProps {
+interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {
     name: string;
     label: string;
-    onChange: (event: any) => void;
-    value: any;
 }
 
 export const Input = (props: InputProps) => {
@@ -13,10 +13,9 @@ export const Input = (props: InputProps) => {
             <span class={styles.inputLabel}>{props.label}</span>
             <input
                 type="text"
-                name={props.name}
                 class={styles.input}
-                onChange={props.onChange}
                 value={props.value}
+                onChange={props.onChange}
             />
         </label>
     );

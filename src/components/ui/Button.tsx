@@ -1,8 +1,9 @@
+import { JSX } from 'solid-js';
+
 import styles from './styles.module.scss';
 
-interface ButtonProps {
+interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
     label: string;
-    onClick: VoidFunction;
 }
 
 export const Button = (props: ButtonProps) => {
