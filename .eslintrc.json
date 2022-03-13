@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:solid/typescript",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "import/order": ["error", { "groups": [["external", "internal"]], "newlines-between": "always" }],
+        "@typescript-eslint/no-empty-function": "off"
+    }
+}
